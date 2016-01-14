@@ -1,6 +1,6 @@
 {
   "name": "redsprite",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "doing images sprite",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/JuneAndGreen/redSprite#readme",
   "dependencies": {
+    "async": "^1.5.2",
+    "layout": "^2.2.0",
+    "lodash": "^4.0.0",
     "lwip": "0.0.8"
   },
   "devDependencies": {
