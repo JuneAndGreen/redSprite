@@ -9,8 +9,6 @@ describe('sprite the images',function(){
 			filemap: {},
 			margin: 0,
 			orientation: 0,
-			template: null,
-			infofile: null,
 			sort: true
 		};
 		obj.filemap[path.join(__dirname, './output/out.png')] = [
