@@ -9,7 +9,11 @@ var def = {
 	/* 排列方向，0表示竖向，1表示横向 */
 	orientation: 0,
 	/* 是否排序 */
-	sort: true
+	sort: true,
+	/* 输出信息模板，可直接传入或使用相对process.cwd的地址 */
+	template: null,
+	/* 输出信息路径 */
+	infosrc: null
 };
 var blank = function() {};
 

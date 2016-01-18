@@ -4,39 +4,32 @@ var fs = require('fs');
 var _ = require('lodash');
 var layout = require('layout');
 var lwip = require('lwip');
+var vfs = require('vinyl-fs');
+var through2 = require('through2');
+
+var format = require('./format');
 
 var Sprite = function(options) {
 	this.opt = options;
-	this.fileMap = options.filemap;
-	this.fileList = [];
+	this.filemap = options.filemap;
 	this.margin = options.margin;
 
-	_.forOwn(this.fileMap, function(value, key) {
-		this.fileList.push(key)
-	}.bind(this));
+	this.filelist = format.getOutputList(options.filemap);
+	this.orientation = format.getOrientation(options.orientation);
 
-	this.init();
+	this.init(options);
 };
 
 Sprite.prototype = {
 	/*
 	 * 处理层级数据
 	 */
-	init: function() {
-		var options = this.opt;
-		switch(options.orientation) {
-			case 0:
-				// 纵向
-				this.orientation = 'top-down';
-				break;
-			case 1:
-				// 横向
-				this.orientation = 'left-right';
-				break;
-			default:
-				// 默认
-				this.orientation = 'binary-tree';
-				break;
+	init: function(options) {
+		if(!format.checkInputSrc(this.filemap)) {
+			throw new Error('输入文件存在无效路径');
+		}
+		if(!format.checkOutputDir(this.filelist)) {
+			throw new Error('生成sprite图的文件路径不正确');
 		}
 		this.layer = layout(this.orientation, {sort: options.sort});
 	},
@@ -106,34 +99,16 @@ Sprite.prototype = {
 		var resMap = {};
 
 		// 逐个文件合并
-		async.eachSeries(this.fileList, function(file, eachCb) {
-			var fileMap = this.fileMap;
-			var inputList = fileMap[file];
-
-			//判断输入路径是否有效
-			for(var i=1; i<inputList.length; i++) {
-				var itm = inputList[i];
-				if(!fs.existsSync(itm)) {
-					break;
-				}
-			}
-			if(i < inputList.length) {
-				eachCb('输入文件存在无效路径');
-				return;
-			}
-
+		async.eachSeries(this.filelist, function(file, eachCb) {
+			var filemap = this.filemap;
+			var inputlist = filemap[file];
 			//获取输出路径信息
 			var pathObj = path.parse(file);
-			if(!pathObj || !fs.existsSync(pathObj.dir)) {
-				// 输出路径目录不存在
-				eachCb('生成sprite图的文件路径不正确');
-				return;
-			}
 			
 			var layerInfo;
 			async.waterfall([function(cb) {
 				// 读取图片
-				this.readImg(inputList, function(res) {
+				this.readImg(inputlist, function(res) {
 					res.forEach(function(item) {this.layer.addItem(item)}, this);
 					cb(null);
 				}.bind(this));
