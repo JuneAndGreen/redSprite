@@ -22,8 +22,10 @@ redSprite.create({
 	},
 	margin: 10,
 	sort: true,
-	orientation: 0 // 0 - 纵向排列，1 - 横向排列
-}, function(res) {
+	orientation: 0, // 0 - 纵向排列，1 - 横向排列
+	tempate: './tpl.css', // 生成的雪碧图信息文件模板，要求为utf-8编码
+	infosrc: './out/tpl.info.css' // 生成的雪碧图信息文件
+}, function(err, res) {
 	// res的结构
 	// {
 	// 	'outputfilepath0': {
@@ -36,6 +38,36 @@ redSprite.create({
 	// 	}
 	// }
 });
+```
+
+## 模板语法
+
+* <% js代码 %>
+* <%= 变量输出 %>
+
+注入到模板的变量只有一个data数组，结构如下
+
+```javascript
+data: [
+	{
+		path: 'xxx', // 大图路径
+		name: 'xxx', // 大图名称
+		ext: 'xxx', // 大图后缀
+		width: xxx,
+		height: xxx,
+		items: [
+			{
+				path: 'xxx', // 小图路径
+				name: 'xxx', // 小图名称
+				ext: 'xxx', // 小图后缀
+				width: xxx,
+				height: xxx,
+				x: xxx,
+				y: xxx
+			}
+		]
+	}
+]
 ```
 
 ## 协议
