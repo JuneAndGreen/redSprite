@@ -10,7 +10,7 @@ var def = {
 	orientation: 0,
 	/* 是否排序 */
 	sort: true,
-	/* 输出信息模板，可直接传入或使用相对process.cwd的地址 */
+	/* 输出信息模板，可直接传入或使用绝对路径，必须使用utf-8编码 */
 	template: null,
 	/* 输出信息路径 */
 	infosrc: null

@@ -70,7 +70,7 @@ var parse = {
         var f = doParseTemplate(content, data);
         return f(data);
       }catch(ex){
-        return ex.message||'';
+        return -1;
       }
     };
   })()

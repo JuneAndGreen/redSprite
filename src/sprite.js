@@ -65,7 +65,7 @@ Sprite.prototype = {
 			var pathitemObj = path.parse(item.meta.name);
 			var obj = {
 				path: item.meta.name, // 小图路径
-				name: path.basename(item, pathitemObj.ext), // 小图名称
+				name: path.basename(item.meta.name, pathitemObj.ext), // 小图名称
 				ext: pathitemObj.ext.substr(1), // 小图后缀
 				width: item.width,
 				height: item.height,
@@ -103,9 +103,8 @@ Sprite.prototype = {
 				 });
 		}.bind(this), function(err) {
 			if(err) throw new Error(err);
-			this.template.generate(tplinfo, function(err) {
-				if(err) throw new Error('生成信息文件失败') 
-				callback(this.imgsinfo);
+			this.template.generate(tplinfo, function(err) { 
+				callback(err, this.imgsinfo);
 			});
 		}.bind(this));
 	}

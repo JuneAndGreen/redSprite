@@ -1,5 +1,16 @@
-body{}
-<% if(a) { %>
-.hh{}
+<% var list = data; %>
+<% for(var i=0; i<list.length; i++) { %>
+<% var item = list[i]; %>
+.u-<%= item.name %>-<%= item.ext %>{
+	background: url(<%= item.path %>);
+	background-size: <%= item.width %>px <%= item.height %>px;
+}
+	<% for(var j=0; j<item.items.length; j++) { %>
+		<% var ilist = item.items; %>
+		<% var iitem = ilist[j]; %>
+		.u-<%= iitem.name %>-<%= iitem.ext %>{
+			background-position: <%= iitem.x %>px <%= iitem.y %>px;
+		}
+	<% } %>
+
 <% } %>
-.coment{}

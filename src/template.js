@@ -27,7 +27,7 @@ Template.prototype = {
 		// 判断模板为路径情况是否能否读取
 		if(fs.existsSync(this.template)) {
 			try {
-				this.template = fs.readFileSync(this.template);
+				this.template = fs.readFileSync(this.template, 'utf-8');
 			} catch(ex) {
 				return false;
 			}
@@ -41,7 +41,7 @@ Template.prototype = {
 	parse: function(data) {
 		if(!this.cantpl) return;
 
-		return parse(this.template, data);
+		return parse(this.template, {data: data});
 	},
 	/*
 	 * 写信息文件
@@ -61,7 +61,12 @@ Template.prototype = {
 		}
 
 		var out = this.parse(tplinfo);
-		this.writeFile(out, callback);
+		if(~out) {
+			this.writeFile(out, callback);
+			return;
+		}
+
+		callback('生成信息文件失败');
 	}
 };
 
