@@ -54,8 +54,8 @@ Sprite.prototype = {
 		var pathObj = path.parse(layerInfo.filePath);
 		var tplobj = {
 			path: layerInfo.filePath, // 大图路径
-			name: path.basename(layerInfo.filePath, pathObj.extname), // 大图名称
-			ext: pathObj.extname.substr(1), // 大图后缀
+			name: path.basename(layerInfo.filePath, pathObj.ext), // 大图名称
+			ext: pathObj.ext.substr(1), // 大图后缀
 			width: layerInfo.width,
 			height: layerInfo.width,
 			items: []
@@ -65,8 +65,8 @@ Sprite.prototype = {
 			var pathitemObj = path.parse(item.meta.name);
 			var obj = {
 				path: item.meta.name, // 小图路径
-				name: path.basename(item, pathitemObj.extname), // 小图名称
-				ext: pathitemObj.extname.substr(1), // 小图后缀
+				name: path.basename(item, pathitemObj.ext), // 小图名称
+				ext: pathitemObj.ext.substr(1), // 小图后缀
 				width: item.width,
 				height: item.height,
 				x: item.x,
@@ -91,21 +91,22 @@ Sprite.prototype = {
 			var pathObj = path.parse(file);
 			this.createimg.setInfo({
 				path: file,
-				format: pathObj.extname.substr(1) || 'png'
+				format: pathObj.ext.substr(1) || 'png'
 			});
 			vfs.src(inputlist)
 				 .pipe(through2.obj(this.readimg.read, this.readimg.afterRead))
 				 .pipe(through2.obj(this.createimg.create, this.createimg.afterCreate))
 				 .pipe(through2.obj(this.merge))
+				 .on('data', function() {})
 				 .on('end', function() {
 				 		eachCb(null);
 				 });
 		}.bind(this), function(err) {
-			if(err) {
-				throw new Error(err);
-			} else {
+			if(err) throw new Error(err);
+			this.template.generate(tplinfo, function(err) {
+				if(err) throw new Error('生成信息文件失败') 
 				callback(this.imgsinfo);
-			}
+			});
 		}.bind(this));
 	}
 };
