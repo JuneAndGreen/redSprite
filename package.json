@@ -13,6 +13,12 @@
   "keywords": [
     "sprite"
   ],
+  "scripts": {
+    "test": "node test/run_tests.js"
+  },
+  "bin": {
+    "redsprite":"./bin/cli.js"
+  },
   "author": "june_01",
   "license": "MIT",
   "bugs": {
